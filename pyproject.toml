@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "myfirst"
+version = "0.1.0"
+description = "ddd"
+authors = ["InnaLik <110997246+InnaLik@users.noreply.github.com>"]
+readme = ""
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.110.2"
+pytest = "^8.1.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
