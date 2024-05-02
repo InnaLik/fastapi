@@ -19,8 +19,13 @@ test_bd_trades = [{"id": 1, "currency": "BTC", "side": "buy", "price": 123, "amo
                   {"id": 2, "currency": "BTC", "side": "buy", "price": 123, "amount": 2.12},
                   {"id": 3, "currency": "BTC", "side": "buy", "price": 123, "amount": 2.12}]
 
+class User(BaseModel):
+    id: int
+    role: str
+    name: str
 
-@app.get("/users/{user_id}")
+
+@app.get("/users/{user_id}", response_model=List[User])
 def get_user(user_id: int):
     return [i for i in test_bd_user if i["id"] == user_id]
 
