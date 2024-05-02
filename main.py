@@ -1,3 +1,5 @@
+import datetime
+from enum import Enum
 from typing import List
 
 from fastapi import FastAPI
@@ -5,7 +7,7 @@ from pydantic import Field, BaseModel
 
 app = FastAPI(title='Tradding App')
 
-test_bd_user = [{"id": 1, "role": "admin", "name": "Bob1"},
+test_bd_user = [{"id": 1, "role": "admin", "name": "Bob1", "degree": [{"id": 1, "created_at": "2020-01-01T00:00:00", "type_degree": "expert"}]},
                 {"id": 2, "role": "admin", "name": "Bob2"},
                 {"id": 3, "role": "admin", "name": "Bob3"},
                 {"id": 4, "role": "admin", "name": "Bob4"}]
@@ -19,10 +21,20 @@ test_bd_trades = [{"id": 1, "currency": "BTC", "side": "buy", "price": 123, "amo
                   {"id": 2, "currency": "BTC", "side": "buy", "price": 123, "amount": 2.12},
                   {"id": 3, "currency": "BTC", "side": "buy", "price": 123, "amount": 2.12}]
 
+class DegreeEnum(Enum):
+    newbie = 'newbie'
+    expert = 'expert'
+
+class Degree(BaseModel):
+    id: int
+    created_at: datetime.datetime
+    type_degree: DegreeEnum
+
 class User(BaseModel):
     id: int
     role: str
     name: str
+    degree: list[Degree]
 
 
 @app.get("/users/{user_id}", response_model=List[User])
@@ -33,7 +45,7 @@ class Trade(BaseModel):
     id: int
     currency: str = Field(max_length=10)
     side: str
-    price: int = Field(gt=0)
+    price: int = Field(ge=0)
     amount: float
 
 @app.post("/trades/")
