@@ -1,10 +1,10 @@
 import datetime
 
 import sqlalchemy
-from sqlalchemy import Integer, String, TIMESTAMP, ForeignKey, Column, JSON
+from sqlalchemy import Integer, String, TIMESTAMP, ForeignKey, Column, JSON, MetaData
 from sqlalchemy.orm import declarative_base
 
-Base = declarative_base()
+Base = MetaData()
 
 class Role(Base):
     __tablename__ = "roles"
