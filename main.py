@@ -8,12 +8,14 @@ from starlette.responses import JSONResponse
 
 app = FastAPI(title='test')
 
-class Deal_type(Enum):
+
+class DealType(Enum):
     buy = "buy"
     sell = "sell"
 
+
 class Deal(BaseModel):
-    type_deal: Deal_type
+    type_deal: DealType
     currency: str = Field(max_length=10)
     price: int = Field(ge=0)
     amount: int = Field(gt=0)
@@ -26,11 +28,14 @@ class User(BaseModel):
     deal: Deal = None
 
 
-db_seller = [{"id": 1, "name": "Inna", "role": "Seller", "deal": {"type_deal": "sell", "currency": "USD", "price": 1, "amount": -2}}]
+db_seller = [{"id": 1, "name": "Inna", "role": "Seller",
+              "deal": {"type_deal": "sell", "currency": "USD", "price": 1, "amount": -2}}]
+
 
 @app.post("/trades/")
 def get_trades(user: User):
     return user
+
 
 @app.exception_handler(ResponseValidationError)
 async def validation_exc_hand(request: Request, exc: ResponseValidationError):

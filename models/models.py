@@ -1,16 +1,15 @@
 import datetime
-
-import sqlalchemy
 from sqlalchemy import Integer, String, TIMESTAMP, ForeignKey, Column, JSON, MetaData
-from sqlalchemy.orm import declarative_base
 
 Base = MetaData()
+
 
 class Role(Base):
     __tablename__ = "roles"
     id = Column(Integer, primary_key=True)
     name = Column(String)
     permission = Column(JSON)
+
 
 class Users(Base):
     __tablename__ = "users"
@@ -21,4 +20,3 @@ class Users(Base):
     password = Column(Integer, nullable=False)
     registration_at = Column(TIMESTAMP, default=datetime.datetime.utcnow)
     role_id = Column(Integer, ForeignKey("roles.id"))
-
