@@ -1,43 +1,25 @@
-from enum import Enum
-
-from fastapi import FastAPI, Request, status
-from fastapi.encoders import jsonable_encoder
-from fastapi.exceptions import ResponseValidationError
-from pydantic import BaseModel, Field
-from starlette.responses import JSONResponse
+from fastapi import FastAPI
+from fastapi_users import fastapi_users, FastAPIUsers
+from auth.auth import auth_backend
+from auth.database import User
+from auth.manager import get_user_manager
+from auth.schema import UserRead, UserCreate
 
 app = FastAPI(title='test')
 
+fastapi_users = FastAPIUsers[User, int](
+    get_user_manager,
+    [auth_backend],
+)
 
-class DealType(Enum):
-    buy = "buy"
-    sell = "sell"
+app.include_router(
+    fastapi_users.get_auth_router(auth_backend),
+    prefix="/auth/jwt",
+    tags=["auth"],
+)
 
-
-class Deal(BaseModel):
-    type_deal: DealType
-    currency: str = Field(max_length=10)
-    price: int = Field(ge=0)
-    amount: int = Field(gt=0)
-
-
-class User(BaseModel):
-    id: int
-    name: str
-    role: str
-    deal: Deal = None
-
-
-db_seller = [{"id": 1, "name": "Inna", "role": "Seller",
-              "deal": {"type_deal": "sell", "currency": "USD", "price": 1, "amount": -2}}]
-
-
-@app.post("/trades/")
-def get_trades(user: User):
-    return user
-
-
-@app.exception_handler(ResponseValidationError)
-async def validation_exc_hand(request: Request, exc: ResponseValidationError):
-    return JSONResponse(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                        content=jsonable_encoder({"detail": exc.errors()}))
+app.include_router(
+    fastapi_users.get_register_router(UserRead, UserCreate),
+    prefix="/auth",
+    tags=["auth"],
+)
