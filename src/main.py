@@ -1,16 +1,12 @@
 from fastapi import FastAPI, Depends
-from fastapi_users import  FastAPIUsers
-from auth.auth import auth_backend
-from auth.database import User
-from auth.manager import get_user_manager
-from auth.schema import UserRead, UserCreate
+from fastapi_users import FastAPIUsers
+
+from src.auth.base_config import auth_backend, fastapi_users, current_user
+from src.auth.manager import get_user_manager
+from src.auth.models import User
+from src.auth.schema import UserRead, UserCreate
 
 app = FastAPI(title='test')
-
-fastapi_users = FastAPIUsers[User, int](
-    get_user_manager,
-    [auth_backend],
-)
 
 app.include_router(
     fastapi_users.get_auth_router(auth_backend),
@@ -24,8 +20,6 @@ app.include_router(
     tags=["auth"],
 )
 
-current_user = fastapi_users.current_user()
-current_active_user = fastapi_users.current_user(active=True)
 
 @app.get("/protected-route")
 def protected_route(user: User = Depends(current_user)):
@@ -35,6 +29,3 @@ def protected_route(user: User = Depends(current_user)):
 @app.get("/unprotected-route")
 def protected_route():
     return f"Hello"
-
-
-
