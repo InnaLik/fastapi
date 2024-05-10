@@ -26,4 +26,3 @@ class User(Base):
     is_superuser = Column(Boolean, default=False, nullable=False)
     is_verified = Column(Boolean, default=False, nullable=False)
     hashed_password = Column(String, max_length=1024, nullable=False)
-
