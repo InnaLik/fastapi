@@ -5,6 +5,7 @@ from sqlalchemy import pool
 from src.config import DB_HOST, DB_NAME, DB_PASS, DB_PORT, DB_USER, SECRET_KEY, SECRET_MANAGER
 from src.auth.models import Base as metadata_auth
 from src.operation.models import Base as metadata_oper
+from src.money.models import Base as metadata_money
 
 import os
 import sys
@@ -34,7 +35,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = [metadata_oper.metadata, metadata_auth.metadata]
+target_metadata = [metadata_oper.metadata, metadata_auth.metadata, metadata_money.metadata]
 
 
 # other values from the config, defined by the needs of env.py,
