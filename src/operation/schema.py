@@ -1,7 +1,6 @@
 import datetime
 
 from pydantic import Field, BaseModel
-from sqlalchemy import TIMESTAMP
 
 
 class OperationCreate(BaseModel):
