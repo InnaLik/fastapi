@@ -12,6 +12,7 @@ from src.auth.models import User
 from src.auth.schema import UserRead, UserCreate
 from src.operation.router import router as router_operation
 from src.money.router import money as router_money
+from src.tasks.router import router as router_tasks
 
 app = FastAPI(title='test')
 
@@ -29,6 +30,7 @@ app.include_router(
 
 app.include_router(router_operation)
 app.include_router(router_money)
+app.include_router(router_tasks)
 
 
 @app.get("/protected-route")
